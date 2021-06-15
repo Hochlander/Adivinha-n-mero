@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />      
+
+
+    <h:head>
+        <title>Ex Contas</title>                 
+
+    </h:head>
+
+    <h:body>
+
+        <h1 style="display: flex; text-align: center" >Calculo</h1>
+        <h3 style="display: flex; text-align: center" >Intervalo</h3>
+        <p>Insira o intervalo de calculo abaixo</p>
+        <div id="form0">
+            <h:form id="form1">
+                <p:growl id="growl" showDetail="true" sticky="false"/>
+                <p:outputLabel styleClass="p-mr-2 p-d-inline"   value="de: "/>
+                <p:inputNumber styleClass="p-d-inline" id="min" required="true" value="#{sorteioBean.min}"/>
+                <p:message for="min"/>
+                <br/>
+                <p:outputLabel styleClass="p-mr-2 p-d-inline"  value="  a: "/>
+                <p:inputNumber styleClass="p-d-inline" id="max"  required="true" value="#{sorteioBean.max}"/>
+                <p:message for="max"/>
+                <br/>
+                <br/>
+                <p:commandButton value="Sortear"  action="#{sorteioBean.geraNumero()}" process="form1" update="@([id$=dialogo]) @([id$=form1]) @([id$=growl]) @([id$=form2])" />
+            </h:form>
+            <br/>
+            <br/>
+            <br/>
+            <h:form id="form2">
+
+                <p><h:outputFormat rendered="#{sorteioBean.iniciado==true}"   value="Faça sua  #{sorteioBean.tentativas +1}ª tentativa!"/></p>
+
+                <br/>
+                <p:outputLabel styleClass="p-mr-2 p-d-inline"  value="seu palpite: " />
+                <p:inputNumber styleClass="p-d-inline" value="#{sorteioBean.palpite}" />
+                <p:commandButton value="verificar" action="#{sorteioBean.pegaPalpite()}" update="@([id$=form2]) @([id$=dialogo])" process="form2"/>
+                <br/>
+                <br/>
+                <p><h:outputFormat rendered="#{sorteioBean.resultado=='menos'}" style="color: red" id="menos" value="o resultado correto é   #{sorteioBean.resultado} que isso"/></p>
+                <p><h:outputFormat rendered="#{sorteioBean.resultado=='mais'}" style="color: blue" id="mais" value="o resultado correto é   #{sorteioBean.resultado} que isso"/></p>
+                <p><h:outputFormat rendered="#{sorteioBean.certo==true}"   value="CERTO!!!"/></p>
+                <br/>
+                <p:outputLabel id="tentativas" value="tentativas:    #{sorteioBean.tentativas}" />
+                <br/>
+                <p:outputLabel id="todasTentativas" value="tentativas anteriores:    #{sorteioBean.palpitesList}" />
+                <br/>
+                <p:outputLabel id="ultimoabaixo" style="color: blue" value="mais que:    #{sorteioBean.ultimoAbaixo}" />
+                <br/>
+                <p:outputLabel id="ultimoacima"  style="color: red" value="menos que:    #{sorteioBean.ultimoAcima}" />
+
+            </h:form>
+            <h:form id="dialogo">
+                <p:dialog modal="true" height="400" width="400" widgetVar="modalVitoria">
+                    <p:outputLabel value="vitoria!"/>
+                    <br/>
+                    <p:outputLabel value="O numero correto é #{sorteioBean.palpite} !"/>
+                    <br/>
+                    <p:outputLabel value="Voce acertou apos #{sorteioBean.tentativas} tentativas!"/>
+                    <p:commandButton value="Jogar de novo" 
+                                     action="#{sorteioBean.geraNumero()}" 
+                                     process="@([id$=form2])" 
+                                     update="@([id$=growl]) @([id$=form1]) @([id$=form2])" 
+                                     onclick="PF('dialogo').hide();"/>            
+                    <p:commandButton value="Fechar" 
+
+                                     onclick="PF('dialogo').hide();"/>            
+
+                </p:dialog>
+            </h:form>
+        </div>
+
+
+
+
+
+
+    </h:body>
+</html>
